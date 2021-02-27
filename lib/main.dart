@@ -473,8 +473,13 @@ class _AlgorithmState extends State<Algorithm> {
       ),
       secondaryActions: <Widget>[
         Container(
+          margin: EdgeInsets.symmetric(vertical: 10),
           child: Card(
-            margin: EdgeInsets.symmetric(vertical: 10),
+            //radius: 30,
+            //margin: EdgeInsets.symmetric(vertical: 10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
             child: IconSlideAction(
               //caption: 'Text1',
               color: Colors.green,
@@ -486,8 +491,12 @@ class _AlgorithmState extends State<Algorithm> {
           ),
         ),
         Container(
+          margin: EdgeInsets.symmetric(vertical: 10),
           child: Card(
-            margin: EdgeInsets.symmetric(vertical: 10),
+            //radius: 30,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
             child: IconSlideAction(
               //caption: 'Text2',
               color: Colors.red.shade600,
