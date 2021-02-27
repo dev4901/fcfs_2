@@ -25,6 +25,7 @@ class Algorithm extends StatefulWidget {
 
 class _AlgorithmState extends State<Algorithm> {
   List<Process> prs = [];
+  FocusNode nodebt = FocusNode();
 
   add(TextEditingController control1, TextEditingController control2) {
     setState(() {
@@ -41,7 +42,11 @@ class _AlgorithmState extends State<Algorithm> {
   delete() {
     setState(() {
       prs.sort((a, b) => a.pid.compareTo(b.pid));
-      prs.removeLast();
+      if (prs.length > 1) {
+        prs.removeLast();
+      } else {
+        prs.remove(prs.length - 1);
+      }
       assignPid(prs);
       fcfsalgo(prs);
       prs.sort((a, b) => a.at.compareTo(b.at));
@@ -83,10 +88,16 @@ class _AlgorithmState extends State<Algorithm> {
                                   ),
                                 ),
                                 TextField(
+                                  autofocus: true,
+                                  cursorWidth: 3,
+                                  cursorColor: Colors.amber,
                                   textAlign: TextAlign.center,
                                   showCursor: true,
                                   controller: control1,
                                   keyboardType: TextInputType.number,
+                                  onSubmitted: (control1) {
+                                    FocusScope.of(context).requestFocus(nodebt);
+                                  },
                                 ),
                               ],
                             ),
@@ -108,6 +119,9 @@ class _AlgorithmState extends State<Algorithm> {
                                 ),
                                 TextField(
                                   textAlign: TextAlign.center,
+                                  focusNode: nodebt,
+                                  cursorWidth: 3,
+                                  cursorColor: Colors.amber,
                                   showCursor: true,
                                   controller: control2,
                                   keyboardType: TextInputType.number,
@@ -216,16 +230,152 @@ class _AlgorithmState extends State<Algorithm> {
   }
 
   Widget buildProcesscard(BuildContext context, int index) {
+    TextEditingController econtrol1 = new TextEditingController();
+    TextEditingController econtrol2 = new TextEditingController();
+
+    econtrol1 = TextEditingController(text: prs[index].at.toString());
+    econtrol2 = TextEditingController(text: prs[index].bt.toString());
+
     var at = prs[index].at.toString();
     var bt = prs[index].bt.toString();
     var tat = prs[index].tat.toString();
     var start = prs[index].start_time.toString();
     var end = prs[index].ct.toString();
     var wt = prs[index].wt.toString();
+
     void deleteprs(int index) {
       setState(() {
         prs.removeAt(index);
       });
+    }
+
+    void editprs(int index, TextEditingController econtrol1,
+        TextEditingController econtrol2) {
+      setState(() {
+        prs[index].at = int.parse(econtrol1.text);
+        prs[index].bt = int.parse(econtrol2.text);
+      });
+    }
+
+    editDialog(BuildContext context, List<Process> prs, int index) {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ), //this right here
+              child: Container(
+                height: 280.0,
+                width: 200.0,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'at:',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  TextField(
+                                    autofocus: true,
+                                    cursorWidth: 3,
+                                    cursorColor: Colors.amber,
+                                    textAlign: TextAlign.center,
+                                    showCursor: true,
+                                    controller: econtrol1,
+                                    keyboardType: TextInputType.number,
+                                    onSubmitted: (text) {
+                                      FocusScope.of(context)
+                                          .requestFocus(nodebt);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'bt:',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  TextField(
+                                    textAlign: TextAlign.center,
+                                    focusNode: nodebt,
+                                    cursorWidth: 3,
+                                    cursorColor: Colors.amber,
+                                    showCursor: true,
+                                    controller: econtrol2,
+                                    keyboardType: TextInputType.number,
+                                    onSubmitted: (text) {
+                                      editprs(index, econtrol1, econtrol2);
+                                      Navigator.of(context)
+                                          .pop(); // Redraw the Stateful Widget
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 38),
+                      child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            RaisedButton(
+                                elevation: 8.0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: Text("Cancel"),
+                                onPressed: () {
+                                  control1.clear();
+                                  control2.clear();
+                                  Navigator.of(context).pop();
+                                }),
+                            RaisedButton(
+                                elevation: 8.0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: Text("Submit"),
+                                onPressed: () {
+                                  editprs(index, control1, control2);
+                                  Navigator.of(context).pop();
+                                }),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          });
     }
 
     displaydialog() {
@@ -326,10 +476,12 @@ class _AlgorithmState extends State<Algorithm> {
           child: Card(
             margin: EdgeInsets.symmetric(vertical: 10),
             child: IconSlideAction(
-              caption: 'Text1',
+              //caption: 'Text1',
               color: Colors.green,
               icon: Icons.edit_outlined,
-              onTap: () {},
+              onTap: () {
+                editDialog(context, prs, index);
+              },
             ),
           ),
         ),
@@ -337,7 +489,7 @@ class _AlgorithmState extends State<Algorithm> {
           child: Card(
             margin: EdgeInsets.symmetric(vertical: 10),
             child: IconSlideAction(
-              caption: 'Text2',
+              //caption: 'Text2',
               color: Colors.red.shade600,
               icon: Icons.delete_rounded,
               onTap: () {
