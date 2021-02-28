@@ -364,7 +364,7 @@ class _AlgorithmState extends State<Algorithm> {
                                 ),
                                 child: Text("Submit"),
                                 onPressed: () {
-                                  editprs(index, control1, control2);
+                                  editprs(index, econtrol1, econtrol2);
                                   Navigator.of(context).pop();
                                 }),
                           ],
