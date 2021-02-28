@@ -184,8 +184,9 @@ class _AlgorithmState extends State<Algorithm> {
         backgroundColor: Colors.amber,
         actions: <Widget>[
           Padding(
-            padding: EdgeInsets.only(right: 10),
+            padding: EdgeInsets.only(right: 20),
             child: FlatButton(
+              color: Colors.amber,
               onPressed: //null,
                   () {
                 prs.sort((a, b) => a.pid.compareTo(b.pid));
@@ -204,12 +205,17 @@ class _AlgorithmState extends State<Algorithm> {
           ),
           Padding(
             padding: EdgeInsets.only(right: 50),
-            child: GestureDetector(
-              onTap: () {
-                createaddDialog(context, prs);
-              },
-              child: Icon(
-                Icons.add,
+            child: Container(
+              color: Colors.amber,
+              width: 60,
+              child: FlatButton(
+                onPressed: () {
+                  createaddDialog(context, prs);
+                },
+                child: Icon(
+                  Icons.add_box,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
