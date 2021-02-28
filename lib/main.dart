@@ -378,23 +378,6 @@ class _AlgorithmState extends State<Algorithm> {
           });
     }
 
-    displaydialog() {
-      return Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        child: Text('Hello you clicked delete at $index'),
-      );
-    }
-
-    createtestdialog(BuildContext context, int index, List<Process> prs) {
-      return showDialog(
-          context: context,
-          builder: (context) {
-            return displaydialog();
-          });
-    }
-
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
